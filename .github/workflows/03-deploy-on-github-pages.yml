@@ -43,7 +43,7 @@ jobs:
               working-directory: frontend
               run: npm run build
 
-            - name: f-stryker Deploy Stryker (PR ${{ matrix.value.number }}) 🚀
+            - name: Deploy to GH Pages 🚀
               uses: JamesIves/github-pages-deploy-action@v4
               with:
                  branch: gh-pages # The branch the action should deploy to.
