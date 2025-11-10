@@ -11,6 +11,9 @@ on:
   workflow_dispatch:
 
 
+env:
+  GH_TOKEN: ${{ github.token }}
+
 # Build the site using `npm run build`
 # Deploy the contents of the `build` directory to the `gh-pages` branch
 
