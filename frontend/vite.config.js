@@ -4,9 +4,6 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 
-
-
-
 // https://vite.dev/config/
 export default defineConfig({
  base: '/dokku-config', // Ensures that the app works correctly when served from a subdirectory
