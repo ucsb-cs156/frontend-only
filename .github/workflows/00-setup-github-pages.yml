@@ -4,7 +4,7 @@ name: 00-setup-github-pages
 # Trigger the workflow when this file is changed
 # and on manual deploy
 
-# YOU WILL NEED to setup PAT_GH_PAGES secret in the org or repo settings.
+# YOU WILL NEED to setup PAT secret in the org or repo settings.
 # A fine grained token WILL NOT WORK.  It must be a classic token with repo and pages scope.
 
 on:
@@ -59,7 +59,7 @@ jobs:
                         -H "Authorization: Bearer $GITHUB_TOKEN " \
                         -H "X-GitHub-Api-Version: 2022-11-28" \
                         https://api.github.com/repos/$REPO/pages \
-                        -d '{"source":{"branch":"gh-pages","path":"/"}}'
+                        -d '{"source":{"branch":"gh-pages","path":"/"},"build_type": "legacy"}'
 
                     # Verify configuration
                     CONFIG=$(curl -sS -L -f \
