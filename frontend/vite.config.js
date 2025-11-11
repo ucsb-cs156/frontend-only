@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig({
- base: '/dokku-config', // Ensures that the app works correctly when served from a subdirectory
+ base: '/frontend-only', // Ensures that the app works correctly when served from a subdirectory
  plugins: [
     react({
        // Tell SWC to explicitly enable the JSX parser
