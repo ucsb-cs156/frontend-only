@@ -72,15 +72,13 @@ jobs:
                  ORG_NAME: ${{ github.repository_owner }}      # Replace with the organization name
                  REPO: ${{ github.repository }}
               run: |
-                    while IFS= read -r repo; do
-                        echo "Setting up github pages site on about page for repository: $repo"
-                        curl -X PATCH -H "Authorization: token ${{env.GITHUB_TOKEN}}"  \
-                            -H "Accept: application/vnd.github+json" \
-                            https://api.github.com/repos/${{env.ORG_NAME}}/${{env.REPO}} \
-                            -d "{\"homepage\":\"https://${{env.ORG_NAME}}.github.io/${{env.REPO}}\"}"
-                        if [ $? -ne 0 ]; then
-                            echo "Failed to set github pages site for repository: $repo"
-                            exit 1
-                        fi
-                        echo "GitHub Pages set on about page for repository: ${{env.ORG_NAME}}/${{env.REPO}}"
-                    done < tmp/repos.dat
+                    echo "Setting up github pages site on about page for repository: $repo"
+                    curl -X PATCH -H "Authorization: token ${{env.GITHUB_TOKEN}}"  \
+                        -H "Accept: application/vnd.github+json" \
+                        https://api.github.com/repos/${{env.ORG_NAME}}/${{env.REPO}} \
+                        -d "{\"homepage\":\"https://${{env.ORG_NAME}}.github.io/${{env.REPO}}\"}"
+                    if [ $? -ne 0 ]; then
+                        echo "Failed to set github pages site for repository: ${{env.ORG_NAME}}/${{env.REPO}}"
+                        exit 1
+                    fi
+                    echo "GitHub Pages set on about page for repository: ${{env.ORG_NAME}}/${{env.REPO}}"
