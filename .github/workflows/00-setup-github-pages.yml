@@ -47,30 +47,37 @@ jobs:
                         echo "gh-pages branch created for repository: ${{ github.repository}}"
                     fi
             - name: Enable Github Pages
-              env:
+             env:
                 GITHUB_TOKEN: ${{ secrets.PAT }} 
               run: |
-                    echo "Enabling GitHub Pages for repository:${{ github.repository}}"
-                    if ! curl -sS -L -f -X POST \
+                    echo "Configuring GitHub Pages for ${{ github.repository }}"
+
+                    # Force Pages source to gh-pages branch
+                    curl -sS -L -f -X PUT \
                         -H "Accept: application/vnd.github+json" \
-                        -H "Content-Type: application/json" \
-                        -H "Authorization: Bearer ${{env.GITHUB_TOKEN}}" \
+                        -H "Authorization: Bearer ${{ secrets.PAT }} " \
                         -H "X-GitHub-Api-Version: 2022-11-28" \
-                        https://api.github.com/repos/${{ github.repository}}/pages \
-                        -d '{"source":{"branch":"gh-pages","path":"/"}}'; then
-                        echo "Failed to enable GitHub Pages for repository: ${{ github.repository}} with POST; trying PUT"
-                        if ! curl -sS -L -f -X PUT \
-                            -H "Accept: application/vnd.github+json" \
-                            -H "Content-Type: application/json" \
-                            -H "Authorization: Bearer ${{env.GITHUB_TOKEN}}" \
-                            -H "X-GitHub-Api-Version: 2022-11-28" \
-                            https://api.github.com/repos/${{ github.repository}}/pages \
-                            -d '{"source":{"branch":"gh-pages","path":"/"}}'; then
-                            echo "Failed to enable GitHub Pages for repository: ${{ github.repository}} with PUT"
-                            exit 1
-                        fi
+                        https://api.github.com/repos/${{ github.repository }}/pages \
+                        -d '{"source":{"branch":"gh-pages","path":"/"}}'
+
+                    # Verify configuration
+                    CONFIG=$(curl -sS -L -f \
+                        -H "Accept: application/vnd.github+json" \
+                        -H "Authorization: Bearer ${{ secrets.PAT }} " \
+                        -H "X-GitHub-Api-Version: 2022-11-28" \
+                        https://api.github.com/repos/${{ github.repository }}/pages)
+
+                    echo "Current Pages config: $CONFIG"
+
+                    BRANCH=$(echo "$CONFIG" | jq -r '.source.branch')
+                    PATH=$(echo "$CONFIG" | jq -r '.source.path')
+
+                    if [ "$BRANCH" != "gh-pages" ] || [ "$PATH" != "/" ]; then
+                        echo "❌ GitHub Pages is NOT configured correctly (branch=$BRANCH, path=$PATH)"
+                        exit 1
+                    else
+                        echo "✅ GitHub Pages is correctly configured on gh-pages /"
                     fi
-                    echo "GitHub Pages enabled for repository: $repo"
             - name: Set repo in "about" section 
               env:
                 GITHUB_TOKEN: ${{ secrets.PAT }} 
