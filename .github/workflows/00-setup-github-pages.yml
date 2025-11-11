@@ -47,7 +47,7 @@ jobs:
                         echo "gh-pages branch created for repository: ${{ github.repository}}"
                     fi
             - name: Enable Github Pages
-             env:
+              env:
                 GITHUB_TOKEN: ${{ secrets.PAT }} 
               run: |
                     echo "Configuring GitHub Pages for ${{ github.repository }}"
