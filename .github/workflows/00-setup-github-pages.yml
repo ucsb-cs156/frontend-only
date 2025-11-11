@@ -72,9 +72,10 @@ jobs:
 
                     BRANCH=$(echo "$CONFIG" | jq -r '.source.branch')
                     PATH=$(echo "$CONFIG" | jq -r '.source.path')
+                    BUILD_TYPE=$(echo "$CONFIG" | jq -r '.build_type')
 
-                    if [ "$BRANCH" != "gh-pages" ] || [ "$PATH" != "/" ]; then
-                        echo "❌ GitHub Pages is NOT configured correctly (branch=$BRANCH, path=$PATH)"
+                    if [ "$BRANCH" != "gh-pages" ] || [ "$PATH" != "/" ] || [ "$BUILD_TYPE" != "legacy" ]; then
+                        echo "❌ GitHub Pages is NOT configured correctly (branch=$BRANCH, path=$PATH, build_type=$BUILD_TYPE)"
                         exit 1
                     else
                         echo "✅ GitHub Pages is correctly configured on gh-pages /"
