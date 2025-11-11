@@ -90,9 +90,9 @@ jobs:
 
                     echo "Current Pages config: $CONFIG"
 
-                    BRANCH=$(echo "$CONFIG" | jq -r '.source.branch')
-                    PATH=$(echo "$CONFIG" | jq -r '.source.path')
-                    BUILD_TYPE=$(echo "$CONFIG" | jq -r '.build_type')
+                    BRANCH=$(echo "$CONFIG" | /usr/bin/jq -r '.source.branch')
+                    PATH=$(echo "$CONFIG" | /usr/bin/jq -r '.source.path')
+                    BUILD_TYPE=$(echo "$CONFIG" | /usr/bin/jq -r '.build_type')
 
                     if [ "$BRANCH" != "gh-pages" ] || [ "$PATH" != "/" ] || [ "$BUILD_TYPE" != "legacy" ]; then
                         echo "❌ GitHub Pages is NOT configured correctly (branch=$BRANCH, path=$PATH, build_type=$BUILD_TYPE)"
