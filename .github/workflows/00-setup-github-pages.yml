@@ -21,14 +21,14 @@ permissions:
     pages: write
 
 jobs:
-    build-and-deploy:
+    setup-github-pages:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
             - name: Create gh-pages branch if not exists
               env:
-                GITHUB_TOKEN: ${{ secrets.PAT }} # Store your Personal Access Token in Secrets
+                GITHUB_TOKEN: ${{ github.token }} 
               run: |
                     echo "Checking if gh-pages branch exists for repository: ${{ github.repository}}"
                     if git ls-remote --exit-code --heads origin gh-pages; then
@@ -47,7 +47,7 @@ jobs:
                     fi
             - name: Enable Github Pages
               env:
-                GITHUB_TOKEN: ${{ secrets.PAT }} # Store your Personal Access Token in Secrets
+                GITHUB_TOKEN: ${{ github.token }} 
               run: |
                     echo "Enabling GitHub Pages for repository:${{ github.repository}}"
                     curl -sS -L \
@@ -64,7 +64,7 @@ jobs:
                     echo "GitHub Pages enabled for repository: $repo"
             - name: Set repo in "about" section 
               env:
-                 GITHUB_TOKEN: ${{ secrets.PAT }} # Store your Personal Access Token in Secrets
+                 GITHUB_TOKEN: ${{ github.token }} 
               run: |
                     echo "Setting up github pages site on about page for repository: $repo"
                     curl -X PATCH -H "Authorization: token ${{env.GITHUB_TOKEN}}"  \
